@@ -19,9 +19,14 @@ function calculateAssetValue() {
   return currentValue;
 }
 
-watch([investmentPeriod, monthlyInvestment, annualInterestRate], () => {
+function updateAssetValue() {
   assetValue.value = calculateAssetValue();
-});
+}
+
+watch(
+  [investmentPeriod, monthlyInvestment, annualInterestRate],
+  updateAssetValue
+);
 </script>
 
 <template>
@@ -33,7 +38,7 @@ watch([investmentPeriod, monthlyInvestment, annualInterestRate], () => {
     </div>
     <div class="input-group">
       <label>毎月の投資金額（円）:</label>
-      <input v-model="monthlyInvestment" type="number" min="0" />
+      <input v-model="monthlyInvestment" type="number" min="0" step="10000" />
     </div>
     <div class="input-group">
       <label>年利率（%）:</label>
