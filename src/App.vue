@@ -30,42 +30,53 @@ watch(
 </script>
 
 <template>
-  <div class="asset-simulator">
-    <h2>資産運用シミュレーター</h2>
-    <div class="input-group">
-      <label>投資期間（年）:</label>
-      <input v-model="investmentPeriod" type="number" min="1" />
+  <v-app>
+    <div class="asset-simulator">
+      <h2>資産運用シミュレーター</h2>
+      <v-card>
+        <div class="input-group">
+          <label>投資期間（年）:</label>
+          <input v-model="investmentPeriod" type="number" min="1" />
+        </div>
+        <div class="input-group">
+          <label>毎月の投資金額（円）:</label>
+          <input
+            v-model="monthlyInvestment"
+            type="number"
+            min="0"
+            step="10000"
+          />
+        </div>
+        <div class="input-group">
+          <label>年利率（%）:</label>
+          <input v-model="annualInterestRate" type="number" min="0" />
+        </div>
+      </v-card>
+      <div class="export" v-if="assetValue !== null">
+        <p>
+          元本:
+          {{
+            Math.round(
+              monthlyInvestment * investmentPeriod * 12
+            ).toLocaleString()
+          }}
+          円
+        </p>
+        <p>将来の資産価値: {{ Math.round(assetValue).toLocaleString() }} 円</p>
+        <p>
+          増加額: +{{
+            Math.round(
+              assetValue - monthlyInvestment * investmentPeriod * 12
+            ).toLocaleString()
+          }}
+          円
+        </p>
+      </div>
+      <v-btn class="calculate-button" @click="calculateAssetValue">
+        計算する
+      </v-btn>
     </div>
-    <div class="input-group">
-      <label>毎月の投資金額（円）:</label>
-      <input v-model="monthlyInvestment" type="number" min="0" step="10000" />
-    </div>
-    <div class="input-group">
-      <label>年利率（%）:</label>
-      <input v-model="annualInterestRate" type="number" min="0" />
-    </div>
-    <div class="export" v-if="assetValue !== null">
-      <p>
-        元本:
-        {{
-          Math.round(monthlyInvestment * investmentPeriod * 12).toLocaleString()
-        }}
-        円
-      </p>
-      <p>将来の資産価値: {{ Math.round(assetValue).toLocaleString() }} 円</p>
-      <p>
-        増加額: +{{
-          Math.round(
-            assetValue - monthlyInvestment * investmentPeriod * 12
-          ).toLocaleString()
-        }}
-        円
-      </p>
-    </div>
-    <button class="calculate-button" @click="calculateAssetValue">
-      計算する
-    </button>
-  </div>
+  </v-app>
 </template>
 
 <style scoped>
